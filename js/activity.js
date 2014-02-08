@@ -1,3 +1,5 @@
+var app;
+
 define(function (require) {
     var activity = require("sugar-web/activity/activity");
 
@@ -6,7 +8,13 @@ define(function (require) {
 
         // Initialize the activity.
         activity.setup();
-
+		
+		// Save mouse position
+		var mouse = {};
+		document.onmousemove = function(e) { mouse.position = {x: e.pageX, y: e.pageY}; }
+		
+		// Launch main screen
+		app = new TankOp.App().renderInto(document.getElementById("board"));
     });
 
 });

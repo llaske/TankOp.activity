@@ -20,10 +20,21 @@ enyo.kind({
 	name: "TankOp.App",
 	kind: enyo.Control,
 	classes: "board",
-	components: [	
+	components: [
+		// Status and score
+		{classes: "status-line", components: [
+			{content: "WAVE", classes: "wave-text"},
+			{name: "wave", content: "1", classes: "wave-value"},
+			{content: "SCORE", classes: "score-text"},
+			{name: "score", content: "0000", classes: "score-value"}
+		]},
+		
 		// Playing zone
 		{name: "gamebox", classes: "game-box", ontap: "gameClick", components: [
 		]},
+		
+		// LCD counter
+		{name: "lcd", kind: "LcdDisplay", classes: "lcd-value", size: 3, value: ""},
 		
 		// Popup
 		{name: "settings", kind: "TankOp.Settings", showing: false, onHide: "initGame"},
@@ -174,27 +185,18 @@ enyo.kind({
 			return;
 			
 		// Play key
-		for (var i = 0 ; i < TankOp.playKeys.length ; i++ ) {
-			var playKey = TankOp.playKeys[i];
-			if (key == playKey.key) {
-				// Fire key
-				if (playKey.hit) {
-					var targetunit = util.lookForUnit(this.targetpos);
-					if (targetunit != null)
-						util.processFight(null, targetunit);
-					break;
-				}
-				
-				// Move key
-				var newX = this.targetpos.x + util.moves[playKey.heading].dx;
-				var newY = this.targetpos.y + util.moves[playKey.heading].dy;
-				if (newX < 0 || newX == constant.boardWidth || newY < 0 || newY == constant.boardHeight)
-					break;
-				this.targetpos.x = newX;
-				this.targetpos.y = newY;
-				break;
-			}
-		}		
+		if (key == 45 || (key >= 48 && key <= 57)) {
+			// Add key to string
+			var value = this.$.lcd.getValue();
+			if (value.length == this.$.lcd.getSize())
+				value = value.substr(1);
+			value += String.fromCharCode(key);
+			this.$.lcd.setValue(value);
+			
+			// Find the right operation
+			//this.targetpos.x = newX;
+			//this.targetpos.y = newY;	
+		}
 	},
 	
 	// A tap occur on the game

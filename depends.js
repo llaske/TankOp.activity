@@ -2,6 +2,7 @@
 	"constant.js",
 	"util.js",
 	"sprite.js",
+	"lcddisplay.js",
 	"imagecache.js",
 	"settings.js",
 	"app.js"

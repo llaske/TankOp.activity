@@ -8,10 +8,97 @@
 	background-color: #C0C0C0;
 }
 
-.pub {
-	height: 100px;
+.status-line {
 	width: 100%;
-	background-color: black;
+	height: 30px;	
+	font-family: NoneShallPassFonts;	
+	font-size: 24px;	
+}
+
+.wave-text {
+	position: absolute;
+	left: 10px;
+}
+
+.wave-value {
+	position: absolute;
+	left: 100px;
+}
+
+.score-text {
+	position: absolute;
+	right: 100px;
+}
+
+.score-value {
+	position: absolute;
+	right: 10px;
+}
+
+.lcd-value {
+	margin-left: auto;
+	margin-right: auto;
+	width: 90px;
+}
+
+.lcd-border {
+	border-style: ridge;
+	border-width: 4px;
+}
+
+.lcd-num {
+	background-image: url(../images/led_values.png);
+	width: 30px;
+	height: 48px;
+	display: inline-block;
+}
+
+.lcd-image-0 {
+	background-position: 0px 0px;
+}
+
+.lcd-image-1 {
+	background-position: -30px 0px;
+}
+
+.lcd-image-2 {
+	background-position: -60px 0px;
+}
+
+.lcd-image-3 {
+	background-position: -90px 0px;
+}
+
+.lcd-image-4 {
+	background-position: -120px 0px;
+}
+
+.lcd-image-5 {
+	background-position: -150px 0px;
+}
+
+.lcd-image-6 {
+	background-position: -180px 0px;
+}
+
+.lcd-image-7 {
+	background-position: -210px 0px;
+}
+
+.lcd-image-8 {
+	background-position: -240px 0px;
+}
+
+.lcd-image-9 {
+	background-position: -270px 0px;
+}
+
+.lcd-image-empty {
+	background-position: -300px 0px;
+}
+
+.lcd-image-dash {
+	background-position: -330px 0px;
 }
 
 .title {
@@ -23,10 +110,6 @@
 	font-family: NoneShallPassFonts;
 	color: white;
 	display:inline-block;	
-}
-
-.pub-text {
-	margin-left: 10%;
 }
 
 .board {

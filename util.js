@@ -114,7 +114,7 @@ util.isValidPosition = function(position, sprite) {
 		return false;
 	
 	// Authorized ground depend of unit type
-	var maptype=app.game[position.y][position.x];
+	var maptype=play.game[position.y][position.x];
 	var unittype=util.getUnitType(sprite);
 	if (unittype == 4)
 		return true;	// Helo can go anywhere
@@ -142,9 +142,9 @@ util.nextPositionOnHeading = function(sprite) {
 // Look for unit at a position
 util.lookForUnit = function(position) {
 	// Launch engine for each unit
-	for (var i = 0 ; i < app.units.length ; i++)
-		if (app.units[i].x == position.x && app.units[i].y == position.y)
-			return app.units[i];
+	for (var i = 0 ; i < play.units.length ; i++)
+		if (play.units[i].x == position.x && play.units[i].y == position.y)
+			return play.units[i];
 	return null;
 }
 
@@ -194,7 +194,7 @@ util.doExplosion = function(position) {
 			window.clearInterval(timer);
 			return;
 		}
-		var ctx = app.canvas.hasNode().getContext('2d');
+		var ctx = play.canvas.hasNode().getContext('2d');
 		var image = document.getElementById(util.explosionsImages[index]);		
 		ctx.save();
 		ctx.translate(position.x*constant.tileSize, position.y*constant.tileSize);

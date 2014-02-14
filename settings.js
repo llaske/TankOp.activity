@@ -1,4 +1,7 @@
 
+settings = {};
+
+
 
 // Settings dialog
 enyo.kind({
@@ -79,17 +82,20 @@ enyo.kind({
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
-		
+	},
+	
+	// Init
+	init: function() {
 		this.ecoin = 100; // TODO
 	
 		this.maps = [{name:"grass", cost: constant.costGrass}, {name:"trees", cost: constant.costTrees}, {name: "mountain", cost: constant.costMountain}],
 		this.mapindex = 0;
-		this.map = "grass";
-		this.hq = 1;
-		this.helo = 0;
-		this.canon = 0;
-		this.tank = 0;
-		this.soldier = 0;
+		settings.map = "grass";
+		settings.hq = 1;
+		settings.helo = 0;
+		settings.canon = 0;
+		settings.tank = 0;
+		settings.soldier = 0;
 		
 		this.total = 1;
 		
@@ -102,16 +108,16 @@ enyo.kind({
 		this.$.ecoin.setContent((this.ecoin-this.total));
 		this.$.maptype.setSrc("images/"+this.maps[this.mapindex].name+".png");
 		this.$.mapcost.setContent(this.maps[this.mapindex].cost);	
-		this.$.hqnumber.setContent(this.hq);
-		this.$.hqcost.setContent((this.hq-1)*constant.costHq);		
-		this.$.helonumber.setContent(this.helo);
-		this.$.helocost.setContent(this.helo*constant.costHelo);		
-		this.$.canonnumber.setContent(this.canon);
-		this.$.canoncost.setContent(this.canon*constant.costCanon);
-		this.$.tanknumber.setContent(this.tank);
-		this.$.tankcost.setContent(this.tank*constant.costTank);
-		this.$.soldiernumber.setContent(this.soldier);
-		this.$.soldiercost.setContent(this.soldier*constant.costSoldier);
+		this.$.hqnumber.setContent(settings.hq);
+		this.$.hqcost.setContent((settings.hq-1)*constant.costHq);		
+		this.$.helonumber.setContent(settings.helo);
+		this.$.helocost.setContent(settings.helo*constant.costHelo);		
+		this.$.canonnumber.setContent(settings.canon);
+		this.$.canoncost.setContent(settings.canon*constant.costCanon);
+		this.$.tanknumber.setContent(settings.tank);
+		this.$.tankcost.setContent(settings.tank*constant.costTank);
+		this.$.soldiernumber.setContent(settings.soldier);
+		this.$.soldiercost.setContent(settings.soldier*constant.costSoldier);
 	},
 	
 	// Change settings event
@@ -120,7 +126,7 @@ enyo.kind({
 		if (newindex < 0) newindex = this.maps.length-1;
 		if ((this.total + this.maps[newindex].cost) > this.ecoin) return;
 		this.mapindex = newindex;
-		this.map = this.maps[newindex].name;
+		settings.map = this.maps[newindex].name;
 		this.updateTotal();
 	},
 	nextMap: function() {
@@ -128,75 +134,76 @@ enyo.kind({
 		if (newindex == this.maps.length) newindex = 0;
 		if ((this.total + this.maps[newindex].cost) > this.ecoin) return;
 		this.mapindex = newindex;
-		this.map = this.maps[newindex].name;		
+		settings.map = this.maps[newindex].name;		
 		this.updateTotal();
 	},
 	lessHq: function() {
-		if (this.hq == 1) return;
-		this.hq = this.hq-1;
+		if (settings.hq == 1) return;
+		settings.hq = settings.hq-1;
 		this.updateTotal();
 	},
 	moreHq: function() {
-		if (this.hq == 4 || (this.total + constant.costHq) > this.ecoin) return;
-		this.hq = this.hq+1;
+		if (settings.hq == 4 || (this.total + constant.costHq) > this.ecoin) return;
+		settings.hq = settings.hq+1;
 		this.updateTotal();
 	},
 	lessHelo: function() {
-		if (this.helo == 0) return;
-		this.helo = this.helo-1;
+		if (settings.helo == 0) return;
+		settings.helo = settings.helo-1;
 		this.updateTotal();
 	},
 	moreHelo: function() {
 		if (this.reachUnitLimit() || (this.total + constant.costHelo) > this.ecoin) return;
-		this.helo = this.helo+1;
+		settings.helo = settings.helo+1;
 		this.updateTotal();
 	},	
 	lessCanon: function() {
-		if (this.canon == 0) return;
-		this.canon = this.canon-1;
+		if (settings.canon == 0) return;
+		settings.canon = settings.canon-1;
 		this.updateTotal();
 	},
 	moreCanon: function() {
 		if (this.reachUnitLimit() || (this.total + constant.costCanon) > this.ecoin) return;
-		this.canon = this.canon+1;
+		settings.canon = settings.canon+1;
 		this.updateTotal();
 	},	
 	lessTank: function() {
-		if (this.tank == 0) return;
-		this.tank = this.tank-1;
+		if (settings.tank == 0) return;
+		settings.tank = settings.tank-1;
 		this.updateTotal();
 	},
 	moreTank: function() {
 		if (this.reachUnitLimit() || (this.total + constant.costTank) > this.ecoin) return;
-		this.tank = this.tank+1;
+		settings.tank = settings.tank+1;
 		this.updateTotal();
 	},	
 	lessSoldier: function() {
-		if (this.soldier == 0) return;
-		this.soldier = this.soldier-1;
+		if (settings.soldier == 0) return;
+		settings.soldier = settings.soldier-1;
 		this.updateTotal();
 	},
 	moreSoldier: function() {
 		if (this.reachUnitLimit() || (this.total + constant.costSoldier) > this.ecoin) return;
-		this.soldier = this.soldier+1;
+		settings.soldier = settings.soldier+1;
 		this.updateTotal();
 	},	
 	
 	// Compute unit limit: max 3 units by HQ
 	reachUnitLimit: function() {
-		return (this.helo+this.canon+this.tank+this.soldier) == (this.hq*3);
+		return (settings.helo+settings.canon+settings.tank+settings.soldier) == (settings.hq*3);
 	},
 	
 	// Compute total
 	updateTotal: function() {
 		this.total = this.maps[this.mapindex].cost
-			+ (this.hq-1)*constant.costHq
-			+ this.helo*constant.costHelo
-			+ this.canon*constant.costCanon
-			+ this.tank*constant.costTank
-			+ this.soldier*constant.costSoldier;
+			+ (settings.hq-1)*constant.costHq
+			+ settings.helo*constant.costHelo
+			+ settings.canon*constant.costCanon
+			+ settings.tank*constant.costTank
+			+ settings.soldier*constant.costSoldier;
 		
 		this.draw();
+		this.render();
 	},
 	
 	// Start game

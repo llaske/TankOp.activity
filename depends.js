@@ -5,5 +5,6 @@
 	"lcddisplay.js",
 	"imagecache.js",
 	"settings.js",
+	"play.js",
 	"app.js"
 );

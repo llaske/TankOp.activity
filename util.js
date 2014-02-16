@@ -141,7 +141,7 @@ util.nextPositionOnHeading = function(sprite) {
 
 // Look for unit at a position
 util.lookForUnit = function(position) {
-	// Launch engine for each unit
+	// Check this position for each unit
 	for (var i = 0 ; i < play.units.length ; i++)
 		if (play.units[i].x == position.x && play.units[i].y == position.y)
 			return play.units[i];

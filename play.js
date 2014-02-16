@@ -78,24 +78,29 @@ enyo.kind({
 		
 		// Set defense around hq
 		if (defense.length > 0) {
-			var unitByHq = Math.floor(defense.length/hqs.length);
-			var index = 0;
-			for (var i = 0 ; i < hqs.length && index < defense.length ; i++) {
-				var unitForHq = 0;
-				defense[index].x = hqs[i].x+1; defense[index].y = hqs[i].y; ++index; ++unitForHq;
-				if (index < defense.length && unitForHq <= unitByHq) {
-					defense[index].x = hqs[i].x; defense[index].y = hqs[i].y-1;	++index; ++unitForHq;				
-					if (index < defense.length && unitForHq <= unitByHq) {
-						defense[index].x = hqs[i].x; defense[index].y = hqs[i].y+1; ++index; ++unitForHq;
+			var hqindex = 0;
+			var defenselength = Math.min(defense.length, 1+hqs.length*2);
+			for (var i = 0 ; i < defenselength ; i++) {
+				var position = {};
+				do {
+					var arounds = [{dx: 1, dy: 0}, {dx: 0, dy: -1}, {dx: 0, dy: 1}];
+					for (j = 0 ; j < arounds.length ; j++) {
+						position = {x: hqs[hqindex].x+arounds[j].dx, y: hqs[hqindex].y+arounds[j].dy};
+						if (util.lookForUnit(position) == null)
+							break;
+						else
+							position = {x: -1, y: -1};
 					}
-				}
-			}
-			for (var i = 0 ; i < defense.length ; i++)
+					hqindex = (hqindex + 1) % hqs.length;
+				} while (position.x == -1);
+				defense[i].x = position.x;
+				defense[i].y = position.y;
 				this.units.push(util.createUnit(defense[i]));
+			}
 		}
 		
 		// Get bad units
-		this.enemyCount = constant.enemyCount+Math.floor(defense.length/3);
+		this.enemyCount = constant.enemyCount+Math.floor(defenselength/3);
 		this.enemyArrivalTurn = constant.enemyArrivalTurn;
 		
 		// Let's Go !

@@ -9,18 +9,12 @@ enyo.kind({
 		{kind: "Image", src: "images/home.png"},
 		
 		// Popup
-		{name: "settings", kind: "TankOp.Settings", showing: false, onHide: "play"}		
+		{content: "START", classes: "start-button", ontap: "play"}	
 	],
 	
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
-	},
-	
-	// Display settings box
-	rendered: function() {
-		this.$.settings.init();
-		this.$.settings.show();	
 	},
 	
 	// Play

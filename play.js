@@ -46,9 +46,18 @@ enyo.kind({
 	
 	// Init game
 	initGame: function() {
+		// Game init
+		var level = this.level = settings.levels[0];
+		var settings_map = level.map;
+		var settings_hq = level.defense[0];
+		var settings_helo = level.defense[1];
+		var settings_canon = level.defense[2];
+		var settings_tank = level.defense[3];
+		var settings_soldier = level.defense[4];
+		
 		// Init board
 		this.initializedGame = true;
-		this.game = util.createMap(util.gameMap(settings.map));
+		this.game = util.createMap(util.gameMap(settings_map));
 		this.targetpos = {x: 7, y: 4};
 
 		// Init units
@@ -57,9 +66,9 @@ enyo.kind({
 		this.units = []
 
 		// Set HQ
-		var step = constant.boardHeight/(settings.hq+1);
+		var step = constant.boardHeight/(settings_hq+1);
 		var hqs = [];
-		for (var i = 0 ; i < settings.hq ; i++) {
+		for (var i = 0 ; i < settings_hq ; i++) {
 			var hq = util.createUnit({type: "hq", color: "blue", x: 0, y: Math.floor((i+1)*step), engine: null});
 			this.units.push(hq);
 			hqs.push(hq);
@@ -67,13 +76,13 @@ enyo.kind({
 		
 		// Create defending units
 		var defense = [];
-		for(var i = 0 ; i < settings.helo ; i++)
+		for(var i = 0 ; i < settings_helo ; i++)
 			defense.push({type: "helo", color: "blue", engine: goodEngine});
-		for(var i = 0 ; i < settings.canon ; i++)
+		for(var i = 0 ; i < settings_canon ; i++)
 			defense.push({type: "canon", color: "blue", engine: goodEngine});
-		for(var i = 0 ; i < settings.tank ; i++)
+		for(var i = 0 ; i < settings_tank ; i++)
 			defense.push({type: "tank", color: "blue", engine: goodEngine});
-		for(var i = 0 ; i < settings.soldier ; i++)
+		for(var i = 0 ; i < settings_soldier ; i++)
 			defense.push({type: "soldier", color: "blue", engine: goodEngine});
 		
 		// Set defense around hq
@@ -100,8 +109,8 @@ enyo.kind({
 		}
 		
 		// Get bad units
-		this.enemyCount = constant.enemyCount+Math.floor(defenselength/3);
-		this.enemyArrivalTurn = constant.enemyArrivalTurn;
+		this.enemyCount = level.attack;
+		this.enemyArrivalTurn = level.arrival;
 		
 		// Let's Go !
 		this.pausedGame = false;
@@ -153,7 +162,7 @@ enyo.kind({
 			var target = document.getElementById("target");		
 			ctx.save();
 			ctx.translate(this.targetpos.x*constant.tileSize, this.targetpos.y*constant.tileSize);
-			ctx.drawImage(target, 0, 0);	
+			ctx.drawImage(target, 0, 0);
 			ctx.restore();				
 		}
 		
@@ -191,11 +200,16 @@ enyo.kind({
 		
 		// Fire key
 		else if (key == 32) {
-			// Find the right operation
-			console.log("FIRE on #"+this.$.lcd.getValue().replace(/ /g,'')+"#");
+			// Look for unit with the value
+			var units = util.lookForValue(this.$.lcd.getValue().replace(/ /g,''));
+			if (units.length != 0) {
+				for (var i = 0 ; i < units.length ; i++) {
+					util.processFight(null, units[i], constant.userPower);
+					this.targetpos.x = units[i].x;
+					this.targetpos.y = units[i].y;			
+				}
+			}
 			this.$.lcd.setValue("");
-			//this.targetpos.x = newX;
-			//this.targetpos.y = newY;	
 		}
 	},
 	
@@ -267,13 +281,18 @@ enyo.kind({
 			// Enemy arrival
 			if (this.enemyArrivalTurn == 0 && this.enemyCount > 0) {
 				var badEngine = enyo.bind(this, "badEngine");
-				var width = constant.boardWidth;
-				var height = constant.boardHeight;
-				var stats = [-1, constant.statSoldier, constant.statTank, constant.statCanon, constant.statHelo];
-				var unit = {type: util.randomUnit(), color: "red", heading:0, engine: badEngine, x: width-1, y: util.random(height)};
-				this.units.push(util.createUnit(unit));
+				var unit = util.createUnit({
+					type: "tank",
+					color: "red",
+					heading: 0,
+					engine: badEngine,
+					x: constant.boardWidth-1,
+					y: util.random(constant.boardHeight)
+				});
+				unit.value = this.level.generator();
+				this.units.push(unit);
 				this.enemyCount = this.enemyCount-1;
-				this.enemyArrivalTurn = constant.enemyArrivalTurn;
+				this.enemyArrivalTurn = this.level.arrival;
 			} else {
 				this.enemyArrivalTurn = this.enemyArrivalTurn - 1;
 			}

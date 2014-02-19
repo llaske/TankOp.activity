@@ -26,6 +26,9 @@ constant.powerTank = 2;
 constant.powerCanon = 3;
 constant.powerHelo = 2;
 
+// User power
+constant.userPower = 10;
+
 // Timer count
 constant.loopInterval = 500;
 constant.explosionInterval = 50;
@@ -45,13 +48,3 @@ constant.costTank = 2;
 constant.costSoldier = 1;
 constant.maxHq = 3;
 
-// Enemy arrival
-constant.enemyCount = 6;
-constant.enemyArrivalTurn = 5;
-constant.statHq = -1;
-constant.statSoldier = 0;
-constant.statTank = 3;
-constant.statCanon = 8;
-constant.statHelo = 9;
-
-constant.pubInterval = 5000;

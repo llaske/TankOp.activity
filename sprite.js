@@ -15,6 +15,10 @@ enyo.kind({
 		ctx.translate(this.x*constant.tileSize, this.y*constant.tileSize);
 		var image = document.getElementById(this.getCurrentImage());
 		ctx.drawImage(image, 0, 0);	
+		if (this.value !== undefined) {
+			ctx.font="20px Arial";
+			ctx.fillText(this.value.tag, 10, 48);
+		}
 		ctx.restore();	
 	},
 	

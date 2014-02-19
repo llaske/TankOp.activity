@@ -148,6 +148,17 @@ util.lookForUnit = function(position) {
 	return null;
 }
 
+// Look for unit with a value
+util.lookForValue = function(value) {
+	// Check this value on each unit
+	var set = [];
+	for (var i = 0 ; i < play.units.length ; i++) {
+		if (play.units[i].value !== undefined && play.units[i].value.result == value)
+			set.push(play.units[i]);
+	}
+	return set;
+}
+
 // Look for opponent around the sprite
 util.lookForOpponent = function(sprite) {
 	var oppositeColor = sprite.getCurrentImage().indexOf("red") != -1 ? "blue" : "red";
@@ -179,10 +190,10 @@ util.couldBeat = function(unit1, unit2) {
 }
 
 // Handle fight between two opponents
-util.processFight = function(unit1, unit2) {
+util.processFight = function(unit1, unit2, power) {
 	if (unit1 != null && !util.couldBeat(unit1, unit2))
 		return;
-	unit2.power = unit2.power - 1;
+	unit2.power = unit2.power - (power !== undefined ? power : 1);
 	util.doExplosion(unit2);
 }
 

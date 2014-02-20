@@ -37,14 +37,6 @@ constant.explosionInterval = 50;
 constant.endGameWidth = 480;
 constant.endGameHeight = 320;
 
-// Buying cost in settings
-constant.costGrass = 1;
-constant.costTrees = 2;
-constant.costMountain = 3;
-constant.costHq = 5;
-constant.costHelo = 4;
-constant.costCanon = 3;
-constant.costTank = 2;
-constant.costSoldier = 1;
-constant.maxHq = 3;
-
+// Units arrival
+constant.startArrival = 5;
+constant.waveInitSize = 2;

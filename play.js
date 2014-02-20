@@ -108,9 +108,12 @@ enyo.kind({
 			}
 		}
 		
-		// Get bad units
+		// Prepare bad units arrival
 		this.enemyCount = level.attack;
-		this.enemyArrivalTurn = level.arrival;
+		this.enemyWaveSize = constant.waveInitSize;
+		this.enemyNextWaveCount = constant.waveInitSize;
+		this.enemyWaveCount = 0;
+		this.enemyArrivalTurn = constant.startArrival;		
 		
 		// Let's Go !
 		this.pausedGame = false;
@@ -265,11 +268,17 @@ enyo.kind({
 		var livingEnemy = 0;
 		for (var i = 0 ; i < this.units.length ; i++) {
 			var unit = this.units[i];
-			if (unit.power > 0)
+			var isRed = unit.getCurrentImage().indexOf("red") != -1;
+			if (unit.power > 0) {
 				alives.push(unit);
+			} else {
+				if (isRed)
+					this.enemyNextWaveCount--;
+				continue;
+			}
 			if (util.getUnitType(unit) == 0)
 				livingHq++;
-			if (unit.getCurrentImage().indexOf("red") != -1)
+			if (isRed)
 				livingEnemy++;				
 		}
 		this.units = alives;
@@ -278,23 +287,34 @@ enyo.kind({
 		
 		// Game play
 		if (!this.endOfGame) {
+			// Next wave
+			if (this.enemyNextWaveCount == 0) {
+				this.enemyWaveSize += 2;
+				this.enemyWaveCount = 0;
+				this.enemyNextWaveCount = this.enemyWaveSize;
+				this.enemyArrivalTurn = constant.startArrival;				
+			}
+			
 			// Enemy arrival
-			if (this.enemyArrivalTurn == 0 && this.enemyCount > 0) {
-				var badEngine = enyo.bind(this, "badEngine");
-				var unit = util.createUnit({
-					type: "tank",
-					color: "red",
-					heading: 0,
-					engine: badEngine,
-					x: constant.boardWidth-1,
-					y: util.random(constant.boardHeight)
-				});
-				unit.value = this.level.generator();
-				this.units.push(unit);
-				this.enemyCount = this.enemyCount-1;
-				this.enemyArrivalTurn = this.level.arrival;
-			} else {
-				this.enemyArrivalTurn = this.enemyArrivalTurn - 1;
+			else if (this.enemyWaveCount != this.enemyWaveSize) {
+				if (this.enemyArrivalTurn == 0 && this.enemyCount > 0) {
+					var badEngine = enyo.bind(this, "badEngine");
+					var unit = util.createUnit({
+						type: "tank",
+						color: "red",
+						heading: 0,
+						engine: badEngine,
+						x: constant.boardWidth-1,
+						y: util.random(constant.boardHeight)
+					});
+					unit.value = this.level.generator();
+					this.units.push(unit);
+					this.enemyCount = this.enemyCount-1;
+					this.enemyWaveCount++;
+					this.enemyArrivalTurn = constant.startArrival;
+				} else {
+					this.enemyArrivalTurn = this.enemyArrivalTurn - 1;
+				}
 			}
 			
 			// Launch engine for each unit

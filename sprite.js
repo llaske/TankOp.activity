@@ -16,8 +16,11 @@ enyo.kind({
 		var image = document.getElementById(this.getCurrentImage());
 		ctx.drawImage(image, 0, 0);	
 		if (this.value !== undefined) {
-			ctx.font="20px Arial";
-			ctx.fillText(this.value.tag, 10, 48);
+			ctx.font="22px Arial";
+			ctx.strokeStyle="#FFFFFF";
+			ctx.strokeText(this.value.tag, 5, 50);
+			ctx.fillStyle="#000000";
+			ctx.fillText(this.value.tag, 6, 51);			
 		}
 		ctx.restore();	
 	},

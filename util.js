@@ -227,10 +227,10 @@ util.random = function(max) {
 }
 
 // Get randomly a unit name
-util.randomUnit = function() {
+util.randomUnit = function(stats) {
 	var unittype = util.random(10);	
 	for (var i = util.unitStats.length-1 ; i > 0 ; i--) {
-		if (unittype >= util.unitStats[i]) {
+		if (unittype >= stats[i]) {
 			return util.unitTypes[i];
 		}
 	}

@@ -18,9 +18,10 @@ enyo.kind({
 		if (this.value !== undefined) {
 			ctx.font="22px Arial";
 			ctx.strokeStyle="#FFFFFF";
-			ctx.strokeText(this.value.tag, 5, 50);
+			var x = (constant.tileSize - ctx.measureText(this.value.tag).width)/2;
+			ctx.strokeText(this.value.tag, x, 50);
 			ctx.fillStyle="#000000";
-			ctx.fillText(this.value.tag, 6, 51);			
+			ctx.fillText(this.value.tag, x+1, 51);			
 		}
 		ctx.restore();	
 	},

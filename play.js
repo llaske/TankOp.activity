@@ -109,6 +109,8 @@ enyo.kind({
 		}
 		
 		// Prepare bad units arrival
+		this.score = 0;		
+		this.wave = 1;
 		this.enemyCount = level.attack;
 		this.enemyWaveSize = constant.waveInitSize;
 		this.enemyNextWaveCount = constant.waveInitSize;
@@ -272,8 +274,10 @@ enyo.kind({
 			if (unit.power > 0) {
 				alives.push(unit);
 			} else {
-				if (isRed)
+				if (isRed) {
 					this.enemyNextWaveCount--;
+					this.score += util.unitPowers[util.getUnitType(unit)];
+				}
 				continue;
 			}
 			if (util.getUnitType(unit) == 0)
@@ -289,6 +293,7 @@ enyo.kind({
 		if (!this.endOfGame) {
 			// Next wave
 			if (this.enemyNextWaveCount == 0) {
+				this.wave++;
 				this.enemyWaveSize += 2;
 				this.enemyWaveCount = 0;
 				this.enemyNextWaveCount = this.enemyWaveSize;
@@ -300,7 +305,7 @@ enyo.kind({
 				if (this.enemyArrivalTurn == 0 && this.enemyCount > 0) {
 					var badEngine = enyo.bind(this, "badEngine");
 					var unit = util.createUnit({
-						type: "tank",
+						type: util.randomUnit(this.level.stats),
 						color: "red",
 						heading: 0,
 						engine: badEngine,
@@ -327,6 +332,10 @@ enyo.kind({
 		
 		// Draw
 		this.draw();
+		
+		// Draw score
+		this.$.wave.setContent(String("0000"+this.wave).slice(-4))
+		this.$.score.setContent(String("0000"+this.score).slice(-4))
 	},
 	
 	// Engine for good tank moves

@@ -40,3 +40,4 @@ constant.endGameHeight = 320;
 // Units arrival
 constant.startArrival = 5;
 constant.waveInitSize = 2;
+

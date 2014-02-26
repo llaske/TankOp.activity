@@ -1,5 +1,6 @@
 var app;
 var play;
+var sound;
 var mouse = {};
 
 define(function (require) {
@@ -13,6 +14,10 @@ define(function (require) {
 		
 		// Save mouse position
 		document.onmousemove = function(e) { mouse.position = {x: e.pageX, y: e.pageY}; }
+		
+		// Create sound component
+		sound = new TankOp.Audio();
+		sound.renderInto(document.getElementById("audio"));
 		
 		// Launch main screen
 		app = new TankOp.App().renderInto(document.getElementById("board"));

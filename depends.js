@@ -4,6 +4,7 @@
 	"sprite.js",
 	"lcddisplay.js",
 	"imagecache.js",
+	"audio.js",	
 	"settings.js",
 	"play.js",
 	"app.js"

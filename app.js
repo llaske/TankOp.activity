@@ -15,12 +15,12 @@ enyo.kind({
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
-		sound.play("audio/soundtrack");
+		sound.play("audio/soundtrack", true);
 	},
 	
 	// Play
 	play: function() {
-		sound.pause();
+		sound.pause();	
 		new TankOp.Play().renderInto(document.getElementById("board"));
 	}
 });

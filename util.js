@@ -200,6 +200,7 @@ util.processFight = function(unit1, unit2, power) {
 // Do explosion animation
 util.doExplosion = function(position) {
 	var index = 0;
+	sound.play("audio/explosion");
 	var timer = window.setInterval(function() {
 		if (index == util.explosionsImages.length) {
 			window.clearInterval(timer);

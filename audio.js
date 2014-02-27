@@ -136,10 +136,11 @@ enyo.kind({
 	},
 	
 	// Play a sound
-	play: function(sound) {
+	play: function(sound, loop) {
 		if (this.format == null)
 			return;
 		this.$.sound.setSrc(sound+this.format);
+		this.$.sound.setLoop(loop === true);
 		this.timeStamp = new Date().getTime();
 		this.$.sound.play();
 	},

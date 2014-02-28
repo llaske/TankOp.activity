@@ -180,6 +180,9 @@ enyo.kind({
 			ctx.translate((constant.areaWidth-constant.endGameWidth)/2, (constant.areaHeight-constant.endGameHeight)/2);
 			ctx.drawImage(endscreen, 0, 0);	
 			ctx.restore();
+			
+			// Play end of game sound
+			sound.play(this.win ? "audio/mission_completed" :  "audio/mission_failed", true);
 		}
 				
 	},
@@ -216,6 +219,8 @@ enyo.kind({
 					this.targetpos.y = units[i].y;			
 				}
 			}
+			else
+				sound.play("audio/missed");
 			this.$.lcd.setValue("");
 		}
 	},

@@ -20,13 +20,13 @@ settings.generateFunctionAddFromTo = function(start, end) {
 // Levels
 settings.levels = [
 	{
-		name: "TYPE NUMBER",
-		map: "grass",
-		defense: [4, 0, 4, 0, 0],
-		attack: 22,
-		stats: [10, 10, 0, 9, 10],
-		generator: settings.typeNumber,
-		completed: false
+		name: "TYPE NUMBER",				// Name of level
+		map: "mountain",					// Name of map, see in util.js
+		defense: [4, 0, 4, 0, 0],			// Defense composition: #HQ, #Soldier, #Tank, #Canon, #Helo
+		attack: 22,							// #Attacking units
+		stats: [10, 10, 0, 9, 10],			// Attack stats composition a random number between 0-9 compared to array number for: HQ, Soldier, Tank, Canon, Helo
+		generator: settings.typeNumber,		// Function to generate the value
+		completed: false					// Use at runtime to see if completed
 	},
 	{
 		name: "ADDITION 1 TO 3",
@@ -39,7 +39,7 @@ settings.levels = [
 	},	
 	{
 		name: "ADDITION 0 TO 5",
-		map: "mountain",
+		map: "grass",
 		defense: [4, 3, 1, 0, 0],
 		attack: 30,
 		stats: [10, 0, 8, 10, 9],
@@ -48,10 +48,10 @@ settings.levels = [
 	},
 	{
 		name: "SUMS TO 10",
-		map: "grass",
+		map: "mountain",
 		defense: [4, 0, 4, 0, 0],
 		attack: 30,
-		stats: [10, 10, 0, 8, 0],
+		stats: [10, 10, 0, 8, 9],
 		generator: settings.generateFunctionAddFromTo(0, 10),
 		completed: false
 	},
@@ -66,7 +66,7 @@ settings.levels = [
 	},	
 	{
 		name: "SUMS TO 20",
-		map: "mountain",
+		map: "grass",
 		defense: [4, 3, 1, 0, 0],
 		attack: 40,
 		stats: [10, 0, 7, 10, 9],

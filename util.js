@@ -236,3 +236,17 @@ util.randomUnit = function(stats) {
 		}
 	}
 }
+
+// Computer nearest unit from me
+util.nearestUnit = function(me, units) {
+	var current = -1;
+	var near = constant.boardWidth*constant.boardHeight;
+	for (var i = 0 ; i < units.length ; i++) {
+		var distance = Math.abs(units[i].x - me.x)+Math.abs(units[i].y - me.y);
+		if (distance < near) {
+			current = i;
+			near = distance;
+		}
+	}
+	return current != -1 ? units[current] : null;
+}

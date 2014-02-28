@@ -278,6 +278,7 @@ enyo.kind({
 		
 		// Sanitize: clean dead units and compute victory/defeat conditions
 		var alives = [];
+		var hqs = [];
 		var livingHq = 0;
 		var livingEnemy = 0;
 		for (var i = 0 ; i < this.units.length ; i++) {
@@ -292,8 +293,9 @@ enyo.kind({
 				}
 				continue;
 			}
-			if (util.getUnitType(unit) == 0)
-				livingHq++;
+			if (util.getUnitType(unit) == 0) {
+				hqs[livingHq++] = unit;
+			}
 			if (isRed)
 				livingEnemy++;				
 		}
@@ -338,7 +340,7 @@ enyo.kind({
 			for (var i = 0 ; i < this.units.length ; i++) {
 				var engine = this.units[i].engine;
 				if (engine != null)
-					engine(this.units[i]);
+					engine(this.units[i], hqs);
 			}
 		}
 		
@@ -351,7 +353,7 @@ enyo.kind({
 	},
 	
 	// Engine for good tank moves
-	goodEngine: function(that) {
+	goodEngine: function(that, hqs) {
 		// Look for enemy unit
 		var opponent = util.lookForOpponent(that);
 		if (opponent != null) {
@@ -365,8 +367,8 @@ enyo.kind({
 	},
 	
 	// Engine for bad tank moves
-	badEngine: function(that) {
-		// Look for enemy unit
+	badEngine: function(that, hqs) {
+		// Look for enemy unit around
 		var opponent = util.lookForOpponent(that);
 		if (opponent != null) {
 			// Change heading toward opponent
@@ -376,11 +378,22 @@ enyo.kind({
 			util.processFight(that, opponent.unit);
 			return;
 		}
+		
+		// Change heading to go toward the nearest HQ
+		var nearestHQ = util.nearestUnit(that, hqs);
+		if (nearestHQ != null) {
+			var dx = that.x - nearestHQ.x;
+			var dy = that.y - nearestHQ.y;
+			if (Math.abs(dx) > Math.abs(dy))
+				that.heading = dx > 0 ? 0 : 2;
+			else
+				that.heading = dy > 0 ? 1 : 3;
+		}
 
 		// Is it a valid position ?
 		var next = util.nextPositionOnHeading(that);		
 		while (!util.isValidPosition(next, that)) {
-			// No, reverse sense
+			// No, try a random heading
 			that.heading = util.random(4);
 			next = util.nextPositionOnHeading(that);
 		}

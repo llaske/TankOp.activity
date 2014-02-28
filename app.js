@@ -6,21 +6,91 @@ enyo.kind({
 	classes: "home",
 	components: [
 		// Image 
-		{kind: "Image", src: "images/home.png"},
+		{classes: "home-image"},
 		
 		// Popup
-		{content: "START", classes: "start-button", ontap: "play"}	
+		{content: "START", classes: "start-button", ontap: "play"},
+		
+		// Next mission
+		{classes: "mission-description", components: [
+			{components: [
+				{content: "NEXT MISSION", classes: "mission-header mission-line"},
+				{content: ":", classes: "mission-dot mission-line"}
+			]},
+			{classes: "go-left mission-line", ontap: "previousMission"},
+			{name: "mission", content: " ", classes: "mission-text mission-line"},			
+			{classes: "go-right mission-line", ontap: "nextMission"}		
+		]},
+		
+		{classes: "mission-status", components: [
+			{components: [
+				{content: "COMPLETED", classes: "mission-header mission-line"},
+				{content: ":", classes: "mission-dot mission-line"}
+			]},
+			{name: "stars", components: [
+				{classes: "mission-completed mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"},
+				{classes: "mission-tocomplete mission-line"}
+			]}
+		]}
 	],
 	
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
-		sound.play("audio/soundtrack", true);
+		this.currentlevel = 0;
+		this.$.mission.setContent(settings.levels[this.currentlevel].name);
+		
+		this.init();
 	},
 	
-	// Play
+	// Draw screen
+	init: function() {
+		// Play theme
+		sound.play("audio/soundtrack", true);
+		
+		// Draw completed mission
+		var items = [];
+		enyo.forEach(this.$.stars.getControls(), function(item) { items.push(item); });		
+		for (var i = 0 ; i < items.length ; i++) { items[i].destroy(); };		
+		for (var i = 0 ; i < settings.levels.length ; i++) {
+			this.$.stars.createComponent({
+					classes: (settings.levels[i].completed ? "mission-completed mission-line" : "mission-tocomplete mission-line")
+				},
+				{owner: this}).render();		
+		}
+	},
+	
+	// Select mission
+	previousMission: function() {
+		this.currentlevel--;
+		if (this.currentlevel < 0)
+			this.currentlevel = settings.levels.length-1;
+		this.$.mission.setContent(settings.levels[this.currentlevel].name);			
+	},
+	
+	nextMission: function() {
+		this.currentlevel++;
+		if (this.currentlevel == settings.levels.length)
+			this.currentlevel = 0;
+		this.$.mission.setContent(settings.levels[this.currentlevel].name);	
+	},
+	
+	// Play game
 	play: function() {
-		sound.pause();	
-		new TankOp.Play().renderInto(document.getElementById("board"));
+		// Stop sound
+		sound.pause();
+
+		// Start game
+		new TankOp.Play({level: this.currentlevel}).renderInto(document.getElementById("board"));
 	}
 });

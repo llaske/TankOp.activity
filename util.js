@@ -39,7 +39,7 @@ util.gameMap = function(map) {
 				"---H-----------" +
 				"-------HH------" +				
 				"-----H--H---H--" +				
-				"---HHH----HH--H";	
+				"---HHH---HH--H-";	
 	} else if (map == "mountain") {
 		return	"---HHH^^^HHH---" +
 				"----HHH^^HH--H-" +

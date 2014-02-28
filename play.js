@@ -4,6 +4,7 @@ enyo.kind({
 	name: "TankOp.Play",
 	kind: enyo.Control,
 	classes: "board",
+	published: { level: 0 },
 	components: [
 		// Status and score
 		{classes: "status-line", components: [
@@ -47,13 +48,13 @@ enyo.kind({
 	// Init game
 	initGame: function() {
 		// Game init
-		var level = this.level = settings.levels[0];
+		var level = this.currentlevel = settings.levels[this.level];
 		var settings_map = level.map;
 		var settings_hq = level.defense[0];
-		var settings_helo = level.defense[1];
-		var settings_canon = level.defense[2];
-		var settings_tank = level.defense[3];
-		var settings_soldier = level.defense[4];
+		var settings_soldier = level.defense[1];
+		var settings_tank = level.defense[2];
+		var settings_canon = level.defense[3];
+		var settings_helo = level.defense[4];
 		
 		// Init board
 		this.initializedGame = true;
@@ -171,13 +172,14 @@ enyo.kind({
 			ctx.restore();				
 		}
 		
-		// Draw end of game screen
+		// End of game
 		else {	
+			// Draw end of game screen
 			var endscreen = this.win ? document.getElementById("endgame_victory") :  document.getElementById("endgame_defeat");
 			ctx.save();
 			ctx.translate((constant.areaWidth-constant.endGameWidth)/2, (constant.areaHeight-constant.endGameHeight)/2);
 			ctx.drawImage(endscreen, 0, 0);	
-			ctx.restore();		
+			ctx.restore();
 		}
 				
 	},
@@ -223,7 +225,12 @@ enyo.kind({
 		// At end of game, quit		
 		if (this.endOfGame) {
 			// Stop game loop
-			window.clearInterval(this.loopTimer);		
+			window.clearInterval(this.loopTimer);
+			
+			// Set mission result
+			if (this.win) settings.levels[this.level].completed = true;
+			app.nextMission();
+			app.init();
 			
 			// Back to app
 			app.renderInto(document.getElementById("board"));
@@ -305,14 +312,14 @@ enyo.kind({
 				if (this.enemyArrivalTurn == 0 && this.enemyCount > 0) {
 					var badEngine = enyo.bind(this, "badEngine");
 					var unit = util.createUnit({
-						type: util.randomUnit(this.level.stats),
+						type: util.randomUnit(this.currentlevel.stats),
 						color: "red",
 						heading: 0,
 						engine: badEngine,
 						x: constant.boardWidth-1,
 						y: util.random(constant.boardHeight)
 					});
-					unit.value = this.level.generator();
+					unit.value = this.currentlevel.generator();
 					this.units.push(unit);
 					this.enemyCount = this.enemyCount-1;
 					this.enemyWaveCount++;

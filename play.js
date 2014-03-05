@@ -21,6 +21,27 @@ enyo.kind({
 		// LCD counter
 		{name: "lcd", kind: "LcdDisplay", classes: "lcd-value", size: 3, value: ""},
 		
+		// Keyboard
+		{classes: "keyboard-line", components: [
+			{classes: "keyboard-line", components: [
+				{kind: "Image", src: "images/key_1.svg", classes: "keyboard", ontap: "virtkeyPressed"},
+				{kind: "Image", src: "images/key_2.svg", classes: "keyboard", ontap: "virtkeyPressed"},
+				{kind: "Image", src: "images/key_3.svg", classes: "keyboard", ontap: "virtkeyPressed"},
+				{kind: "Image", src: "images/key_0.svg", classes: "keyboard", ontap: "virtkeyPressed"}			
+			]},
+			{classes: "keyboard_line", components: [
+				{kind: "Image", src: "images/key_4.svg", classes: "keyboard", ontap: "virtkeyPressed"},
+				{kind: "Image", src: "images/key_5.svg", classes: "keyboard", ontap: "virtkeyPressed"},
+				{kind: "Image", src: "images/key_6.svg", classes: "keyboard", ontap: "virtkeyPressed"},
+				{kind: "Image", src: "images/key_fire.svg", classes: "keyboard", ontap: "virtkeyPressed"}
+			]},
+			{classes: "keyboard_line", components: [
+				{kind: "Image", src: "images/key_7.svg", classes: "keyboard", ontap: "virtkeyPressed"},
+				{kind: "Image", src: "images/key_8.svg", classes: "keyboard", ontap: "virtkeyPressed"},
+				{kind: "Image", src: "images/key_9.svg", classes: "keyboard", ontap: "virtkeyPressed"}
+			]}			
+		]},
+		
 		// Key handling
 		{kind: "Signals", onkeypress: "keyPressed"},
 
@@ -225,6 +246,16 @@ enyo.kind({
 		}
 	},
 	
+	// A virtual key is pressed
+	virtkeyPressed: function(s) {
+		var classes = s.getSrc().replace(".svg", "");
+		var value = classes.substr("images/key_".length,classes.indexOf("key_"));
+		if (value == "fire")
+			this.keyPressed(null, {charCode: 32});
+		else
+			this.keyPressed(null, {charCode: 48+parseInt(value)});
+	},
+	
 	// A tap occur on the game
 	gameClick: function() {		
 		// At end of game, quit		
@@ -233,8 +264,10 @@ enyo.kind({
 			window.clearInterval(this.loopTimer);
 			
 			// Set mission result
-			if (this.win) settings.levels[this.level].completed = true;
-			app.nextMission();
+			if (this.win) {
+				settings.levels[this.level].completed = true;
+				app.nextMission();
+			}
 			app.init();
 			
 			// Back to app

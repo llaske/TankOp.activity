@@ -202,7 +202,7 @@ util.doExplosion = function(position) {
 	var index = 0;
 	sound.play("audio/explosion");
 	var timer = window.setInterval(function() {
-		if (index == util.explosionsImages.length) {
+		if (index == util.explosionsImages.length || app.endOfGame) {
 			window.clearInterval(timer);
 			return;
 		}

@@ -17,7 +17,7 @@ enyo.kind({
 		ctx.drawImage(image, 0, 0);	
 		if (this.value !== undefined) {
 			ctx.font="22px Arial";
-			ctx.strokeStyle="#FFFFFF";
+			ctx.strokeStyle="#FFFF00";
 			var x = (constant.tileSize - ctx.measureText(this.value.tag).width)/2;
 			ctx.strokeText(this.value.tag, x, 50);
 			ctx.fillStyle="#000000";

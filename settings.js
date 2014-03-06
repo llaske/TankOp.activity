@@ -17,6 +17,43 @@ settings.generateFunctionAddFromTo = function(start, end) {
 	}
 }
 
+settings.missingNumbers = function() {
+	var number1 = Math.floor(Math.random()*11);
+	var number2 = Math.floor(Math.random()*11);	
+	return { tag: ""+number1+"+?="+(number1+number2), result: number2 };
+}
+
+settings.generateFunctionSubstractFromTo = function(start, end, negative) {
+	var difference = end-start+1;
+	return function() {
+		var number1 = start+Math.floor(Math.random()*difference);
+		var number2 = start+Math.floor(Math.random()*difference);
+		if (!negative && Math.abs(number2) > Math.abs(number1)) {
+			var tmp = number1;
+			number1 = number2;
+			number2 = tmp;
+		}
+		return { tag: ""+number1+"-"+number2, result: number1-number2 }
+	}
+}
+
+settings.additionSubtraction = function() {
+	var number1 = Math.floor(Math.random()*21);
+	var number2 = Math.floor(Math.random()*11);	
+	var sign = Math.floor(Math.random()*2);	
+	if (sign == 0)
+		return { tag: ""+number1+"+"+number2, result: number1+number2 };
+	else {
+		if (Math.abs(number2) > Math.abs(number1)) {
+			var tmp = number1;
+			number1 = number2;
+			number2 = tmp;
+		}
+		return { tag: ""+number1+"-"+number2, result: number1-number2 }
+	}
+}
+
+
 // Levels
 settings.levels = [
 	{
@@ -71,6 +108,60 @@ settings.levels = [
 		attack: 40,
 		stats: [10, 0, 7, 10, 9],
 		generator: settings.generateFunctionAddFromTo(0, 20),
+		completed: false
+	},
+	{
+		name: "TWO DIGITS NUMBERS",
+		map: "mountain",
+		defense: [4, 4, 4, 0, 0],
+		attack: 40,
+		stats: [10, 0, 1, 8, 9],
+		generator: settings.generateFunctionAddFromTo(10, 20),
+		completed: false
+	},
+	{
+		name: "MISSING NUMBERS",
+		map: "trees",
+		defense: [4, 2, 2, 0, 0],
+		attack: 40,
+		stats: [10, 0, 7, 10, 10],
+		generator: settings.missingNumbers,
+		completed: false
+	},
+	{
+		name: "SUBTRACTION 0 TO 10",
+		map: "grass",
+		defense: [4, 0, 4, 0, 0],
+		attack: 40,
+		stats: [10, 10, 0, 9, 10],
+		generator: settings.generateFunctionSubstractFromTo(0, 10, false),
+		completed: false
+	},
+	{
+		name: "SUBTRACTION 0 TO 20",
+		map: "trees",
+		defense: [4, 2, 2, 0, 0],
+		attack: 20,
+		stats: [10, 0, 8, 10, 10],
+		generator: settings.generateFunctionSubstractFromTo(0, 20, false),
+		completed: false
+	},
+	{
+		name: "SUBTRACTION TWO DIGITS",
+		map: "mountain",
+		defense: [4, 4, 4, 0, 0],
+		attack: 30,
+		stats: [10, 0, 1, 8, 9],
+		generator: settings.generateFunctionSubstractFromTo(10, 30, false),
+		completed: false
+	},
+	{
+		name: "ADDITION AND SUBTRACTION",
+		map: "trees",
+		defense: [4, 2, 2, 0, 0],
+		attack: 40,
+		stats: [10, 0, 7, 10, 10],
+		generator: settings.additionSubtraction,
 		completed: false
 	}	
 ];

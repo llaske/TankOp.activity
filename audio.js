@@ -142,6 +142,7 @@ enyo.kind({
 		this.$.sound.setSrc(sound+this.format);
 		this.$.sound.setLoop(loop === true);
 		this.timeStamp = new Date().getTime();
+		this.render();
 		this.$.sound.play();
 	},
 	

@@ -18,11 +18,17 @@ enyo.kind({
 		{name: "gamebox", classes: "game-box", ontap: "gameClick", components: [
 		]},
 		
+		// Home button
+		{kind: "Image", classes: "home-button", src: "images/gohome.png", ontap: "goHome"},
+		
 		// LCD counter
-		{name: "lcd", kind: "LcdDisplay", classes: "lcd-value", size: 3, value: ""},
+		{classes: "display-line", components: [
+			{name: "lcd", kind: "LcdDisplay", classes: "lcd-value", size: 3, value: ""},
+			{name: "switchkeyboard", kind: "Image", classes: "keyboard-view", src: "images/keyboard_show.svg", ontap: "switchKeyboard"}
+		]},
 		
 		// Keyboard
-		{classes: "keyboard-line", components: [
+		{name: "keyboard", classes: "keyboard-line", showing: false, components: [
 			{classes: "keyboard-line", components: [
 				{kind: "Image", src: "images/key_1.svg", classes: "keyboard", ontap: "virtkeyPressed"},
 				{kind: "Image", src: "images/key_2.svg", classes: "keyboard", ontap: "virtkeyPressed"},
@@ -57,6 +63,7 @@ enyo.kind({
 		this.endOfGame = false;
 		this.pausedGame = true;
 		this.initializedGame = false;
+		this.waitForClick = false;
 		
 		// Init canvas
 		this.$.gamebox.setStyle("width:"+constant.areaWidth+"px; height:"+constant.areaHeight+"px;");
@@ -203,7 +210,10 @@ enyo.kind({
 			ctx.restore();
 			
 			// Play end of game sound
-			sound.play(this.win ? "audio/mission_completed" :  "audio/mission_failed", true);
+			if (!this.waitForClick) {
+				sound.play(this.win ? "audio/mission_completed" :  "audio/mission_failed", true);
+				this.waitForClick = true;
+			}
 		}
 				
 	},
@@ -256,6 +266,22 @@ enyo.kind({
 			this.keyPressed(null, {charCode: 48+parseInt(value)});
 	},
 	
+	// Show/hide virtual keyboard
+	switchKeyboard: function() {
+		var showing = this.$.keyboard.getShowing();
+		this.$.keyboard.setShowing(!showing);
+		this.$.switchkeyboard.setSrc(showing ? "images/keyboard_show.svg" : "images/keyboard_hide.svg");
+	},
+	
+	goHome: function() {
+		// Stop game loop
+		window.clearInterval(this.loopTimer);
+
+		// Back to app
+		app.init();			
+		app.renderInto(document.getElementById("board"));
+	},
+
 	// A tap occur on the game
 	gameClick: function() {		
 		// At end of game, quit		

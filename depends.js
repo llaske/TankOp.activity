@@ -7,5 +7,6 @@
 	"audio.js",	
 	"settings.js",
 	"play.js",
+	"credits.js",
 	"app.js"
 );

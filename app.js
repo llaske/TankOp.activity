@@ -11,6 +11,10 @@ enyo.kind({
 		// Popup
 		{content: "START", classes: "start-button", ontap: "play"},
 		
+		// Credit
+		{kind: "Image", classes: "credit-button", src: "images/credit.png", ontap: "showCredit"},
+		{name: "creditsPopup", kind: "TankOp.CreditsPopup"},		
+		
 		// Next mission
 		{classes: "mission-description", components: [
 			{components: [
@@ -83,6 +87,11 @@ enyo.kind({
 		if (this.currentlevel == settings.levels.length)
 			this.currentlevel = 0;
 		this.$.mission.setContent(settings.levels[this.currentlevel].name);	
+	},
+	
+	// Show credit
+	showCredit: function() {
+		this.$.creditsPopup.show();	
 	},
 	
 	// Play game

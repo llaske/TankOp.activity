@@ -3,6 +3,7 @@
 enyo.kind({
 	name: "TankOp.App",
 	kind: enyo.Control,
+	published: {activity: null},	
 	classes: "home",
 	components: [
 		// Image 
@@ -101,5 +102,24 @@ enyo.kind({
 
 		// Start game
 		new TankOp.Play({level: this.currentlevel}).renderInto(document.getElementById("board"));
-	}
+	},
+	
+	// Load game from datastore
+	load: function() {
+		var datastoreObject = this.activity.getDatastoreObject();
+		var currentthis = this;
+		datastoreObject.loadAsText(function (error, metadata, data) {
+			var data = JSON.parse(data);
+			settings.setState(data);
+			currentthis.init();
+		});	
+	},
+	
+	// Save game in datastore
+	save: function(count) {
+		var datastoreObject = this.activity.getDatastoreObject();
+		var jsonData = JSON.stringify(settings.getState());
+		datastoreObject.setDataAsText(jsonData);
+		datastoreObject.save(function() {});
+	}	
 });

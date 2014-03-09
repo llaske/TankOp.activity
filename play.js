@@ -86,7 +86,7 @@ enyo.kind({
 		
 		// Init board
 		this.initializedGame = true;
-		this.game = util.createMap(util.gameMap(settings_map));
+		this.game = util.createMap(settings.gameMap(settings_map));
 		this.targetpos = {x: 7, y: 4};
 
 		// Init units
@@ -274,6 +274,12 @@ enyo.kind({
 	},
 	
 	goHome: function() {
+		// Click at the end of game
+		if (this.waitForClick) {
+			this.gameClick();
+			return;
+		}
+		
 		// Stop game loop
 		window.clearInterval(this.loopTimer);
 
@@ -293,6 +299,7 @@ enyo.kind({
 			if (this.win) {
 				settings.levels[this.level].completed = true;
 				app.nextMission();
+				app.save();
 			}
 			app.init();
 			

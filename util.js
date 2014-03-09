@@ -17,43 +17,6 @@ util.unitStats = [constant.statHq, constant.statSoldier, constant.statTank, cons
 util.explosionsImages = ["explosion_1", "explosion_2", "explosion_3", "explosion_4", "explosion_5", "explosion_6", "explosion_7"];
 
 
-// Game map
-util.gameMap = function(map) {
-	var width = constant.boardWidth, height = constant.boardHeight;
-	if (map == "grass") {
-		return	"---HOH-----H---" +
-				"----H----------" +
-				"---------------" +
-				"---------------" +
-				"---------------" +
-				"-----------H---" +			
-				"-----H---------" +			
-				"---------------" +			
-				"---------H-H---";	
-	 } else if (map == "trees") {
-		return	"------H--HHHH^-" +
-				"----H--H----HH-" +
-				"------H---H----" +
-				"---------------" +
-				"---------------" +
-				"---H-----------" +
-				"-------HH------" +				
-				"-----H--H---H--" +				
-				"---HHH---HH--H-";	
-	} else if (map == "mountain") {
-		return	"---HHH^^^HHH---" +
-				"----HHH^^HH--H-" +
-				"------H-HH-----" +
-				"---H-----------" +
-				"-------O-------" +
-				"-----------H---" +		
-				"-----H-H-------" +			
-				"-----HHH^H-H---" +			
-				"----HHH^^^HHH--";			
-	}
-	return new Array(width*height).join('-');
-}
-
 // Prepare board using ground model
 util.createMap = function(grounds) {
 	var game = [];

@@ -2,6 +2,63 @@
 settings = {};
 
 
+// Get/Set state
+settings.getState = function() {
+	var states = [];
+	for(var i = 0 ; i < this.levels.length ; i++) {
+		states.push(this.levels[i].completed);
+	}
+	return states;
+}
+settings.setState = function(states) {
+	if (states == null || states.length != this.levels.length)
+		return false;
+	for (var i = 0 ; i < this.levels.length ; i++) {
+		this.levels[i].completed = states[i];
+	}
+	return true;
+}
+
+
+
+// Game map
+settings.gameMap = function(map) {
+	var width = constant.boardWidth, height = constant.boardHeight;
+	if (map == "grass") {
+		return	"---HOH-----H---" +		// - = Grass
+				"----H----------" +		// H = Trees
+				"---------------" +		// ^ = Mountain
+				"---------------" +		// O = Lake
+				"---------------" +
+				"-----------H---" +			
+				"-----H---------" +			
+				"---------------" +			
+				"---------H-H---";	
+	 } else if (map == "trees") {
+		return	"------H--HHHH^-" +
+				"----H--H----HH-" +
+				"------H---H----" +
+				"---------------" +
+				"---------------" +
+				"---H-----------" +
+				"-------HH------" +				
+				"-----H--H---H--" +				
+				"---HHH---HH--H-";	
+	} else if (map == "mountain") {
+		return	"---HHH^^^HHH---" +
+				"----HHH^^HH--H-" +
+				"------H-HH-----" +
+				"---H-----------" +
+				"-------O-------" +
+				"-----------H---" +		
+				"-----H-H-------" +			
+				"-----HHH^H-H---" +			
+				"----HHH^^^HHH--";			
+	}
+	return new Array(width*height).join('-');
+}
+
+
 // Functions to generate tags
 settings.typeNumber = function() {
 	var number = Math.floor(Math.random()*11);
@@ -54,7 +111,7 @@ settings.additionSubtraction = function() {
 }
 
 
-// Levels
+// Play levels
 settings.levels = [
 	{
 		name: "TYPE NUMBER",				// Name of level

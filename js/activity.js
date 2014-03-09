@@ -20,7 +20,9 @@ define(function (require) {
 		sound.renderInto(document.getElementById("audio"));
 		
 		// Launch main screen
-		app = new TankOp.App().renderInto(document.getElementById("board"));
+		app = new TankOp.App({activity: activity});
+		app.load();
+        app.renderInto(document.getElementById("board"));		
     });
 
 });
